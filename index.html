@@ -3,150 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة المؤتمر</title>
+    <title>مؤتمر 2026 التفاعلي</title>
+    <!-- خط Google الحديث -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: #f4f6f9; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
-        h1, h2, h3 { text-align: center; color: #2c3e50; }
-        nav { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px; }
-        button { background: #3498db; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; }
-        button:hover { background: #2980b9; }
-        .btn-danger { background: #e74c3c; }
-        .btn-danger:hover { background: #c0392b; }
-        .btn-success { background: #2ecc71; }
-        .btn-success:hover { background: #27ae60; }
-        .section { display: none; }
-        .active { display: block; }
-        form { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }
-        input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-        .card { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 12px; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
-        .tag { background: #e0e0e0; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+        /* CSS: تصميم وتنسيق الواجهة */
+        :root {
+            --main-color: #2b5a83;
+            --accent-color: #f39c12;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px 10px;
+        }
+
+        .main-card {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 25px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: var(--main-color);
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        /* شريط التنقل العلوي */
+        .nav-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #edf2f7;
+            padding: 6px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #64748b;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .nav-btn.active {
+            background: var(--main-color);
+            color: white;
+        }
+
+        /* الأقسام الصفحات */
+        .page {
+            display: none;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        /* الإدخالات والفورم */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 12px;
+            background: var(--main-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* تصميم كروت الكتب والمسابقات */
+        .item-card {
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-btn {
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* لوحة التحكم والصدارة */
+        .user-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .score-badge {
+            background: #fef3c7;
+            color: #d97706;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .btn-score {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            margin-right: 4px;
+        }
+        .btn-plus { background: #10b981; }
+        .btn-minus { background: #ef4444; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🚀 منصة المؤتمر التفاعلية</h1>
-    
-    <nav>
-        <button onclick="showSection('register')">👤 التسجيل</button>
-        <button onclick="showSection('leaderboard')">🏆 لوحة الصدارة</button>
-        <button onclick="showSection('books')">📚 الكتب والمسابقات</button>
-        <button onclick="showSection('host')" style="background:#8e44ad;">⚙️ لوحة الهوست</button>
-    </nav>
+<div class="main-card">
+    <div class="header">
+        <h1>🎙️ منصة المؤتمر</h1>
+        <p style="color: #64748b; font-size: 14px;">مرحباً بكم في فعاليات اليوم</p>
+    </div>
 
-    <!-- 1. صفحة التسجيل -->
-    <div id="register" class="section active">
-        <h2>تسجيل مشارك جديد</h2>
-        <form id="regForm">
-            <input type="text" id="username" placeholder="الاسم بالكامل" required>
-            <select id="userRole">
-                <option value="user">مشارك / زائر</option>
-                <option value="host">هوست (منظم للمؤتمر)</option>
+    <!-- 1. شريط التنقل -->
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="switchPage('register', this)">التسجيل</button>
+        <button class="nav-btn" onclick="switchPage('leaderboard', this)">الترتيب</button>
+        <button class="nav-btn" onclick="switchPage('content', this)">الكتب والمسابقات</button>
+        <button class="nav-btn" onclick="switchPage('host', this)">الهوست</button>
+    </div>
+
+    <!-- 2. صفحة التسجيل -->
+    <div id="register" class="page active-page">
+        <div class="form-group">
+            <label>الاسم بالكامل</label>
+            <input type="text" id="nameInput" placeholder="اكتب اسمك هنا...">
+        </div>
+        <div class="form-group">
+            <label>نوع الحساب</label>
+            <select id="roleInput">
+                <option value="user">حاضر / مراجع</option>
+                <option value="host">هوست (منظم)</option>
             </select>
-            <button type="submit" class="btn-success">دخول المنصة</button>
-        </form>
-    </div>
-
-    <!-- 2. لوحة الصدارة -->
-    <div id="leaderboard" class="section">
-        <h2>ترتيب المتنافسين النقاط 🎯</h2>
-        <div id="leaderboardList"></div>
-    </div>
-
-    <!-- 3. الكتب والمسابقات -->
-    <div id="books" class="section">
-        <h2>📚 الكتب والملفات المتاحة</h2>
-        <div id="booksList">
-            <div class="card">
-                <h3>📖 كتيب المؤتمر الرئيسي</h3>
-                <p>الملف التعريفي بجدول أعمال المؤتمر والمحاضرين.</p>
-                <a href="book1.pdf" download><button class="btn-success">تحميل PDF ⬇️</button></a>
-            </div>
         </div>
+        <button class="btn-action" onclick="registerUser()">تسجيل الدخول</button>
+    </div>
 
-        <h2>🏆 المسابقات الحالية</h2>
-        <div id="competitionsList">
-            <div class="card">
-                <h3>تحدي الجلسة الأولى</h3>
-                <p>إجابة السؤال المطروح في الجلسة: اطلب من الهوست إضافة 50 نقطة لرصيدك عند إجابتك الصحيحة!</p>
-            </div>
+    <!-- 3. صفحة لوحة الصدارة -->
+    <div id="leaderboard" class="page">
+        <h3 style="margin-bottom: 15px;">🏆 قائمة المتنافسين</h3>
+        <div id="leaderboardData">
+            <!-- سيتم ملء البيانات هنا تلقائياً -->
         </div>
     </div>
 
-    <!-- 4. لوحة التحكم الهوست -->
-    <div id="host" class="section">
-        <h2>لوحة تحكم المنظمين (إدارة النقاط)</h2>
-        <p style="text-align:center; color: #7f8c8d;">تستطيع من هنا زيادة أو تنقيص نقاط أي مشارك بناءً على تفاعله في المؤتمر.</p>
-        <div id="hostControlList"></div>
+    <!-- 4. صفحة الكتب والمسابقات -->
+    <div id="content" class="page">
+        <h3 style="margin-bottom: 15px;">📚 الكتب المتاحة</h3>
+        <div class="item-card">
+            <div>
+                <strong>دليل المؤتمر 2026</strong>
+                <p style="font-size: 12px; color: #64748b;">ملف PDF يحتوي التفاصيل</p>
+            </div>
+            <button class="item-btn" onclick="alert('جاري تحميل الكتاب...')">تحميل</button>
+        </div>
+
+        <h3 style="margin-top: 20px; margin-bottom: 15px;">🎮 المسابقات والفعاليات</h3>
+        <div class="item-card">
+            <div>
+                <strong>مسابقة الجلسة الصباحية</strong>
+                <p style="font-size: 12px; color: #64748b;">إجابة السؤال تمنحك +20 نقطة</p>
+            </div>
+            <span class="score-badge">نشطة</span>
+        </div>
+    </div>
+
+    <!-- 5. صفحة الهوست (التحكم) -->
+    <div id="host" class="page">
+        <h3 style="margin-bottom: 10px;">⚙️ التحكم في النقاط</h3>
+        <p style="font-size: 12px; color: #64748b; margin-bottom: 15px;">خاص بالهوست لتعديل رصيد الحضور:</p>
+        <div id="hostControlData">
+            <!-- سيتم ملء قوائم المستخدمين للتعديل هنا -->
+        </div>
     </div>
 </div>
 
 <script>
-    let users = JSON.parse(localStorage.getItem('conf_users')) || [];
+    /* JavaScript: تشغيل الواجهة وتفاعلاتها */
+    let usersList = [];
 
-    function saveUsers() {
-        localStorage.setItem('conf_users', JSON.stringify(users));
-        render();
-    }
-
-    function showSection(id) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    document.getElementById('regForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('username').value;
-        const role = document.getElementById('userRole').value;
+    // التنقل بين الصفحات
+    function switchPage(pageId, btnElement) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         
-        users.push({ id: Date.now(), name, role, score: 0 });
-        saveUsers();
-        alert('تم التسجيل بنجاح!');
-        document.getElementById('username').value = '';
-        showSection('leaderboard');
-    });
+        document.getElementById(pageId).classList.add('active-page');
+        btnElement.classList.add('active');
+        
+        updateUI();
+    }
 
-    function changeScore(userId, amount) {
-        const user = users.find(u => u.id === userId);
-        if (user) {
-            user.score += amount;
-            saveUsers();
+    // إضافة مستخدم جديد
+    function registerUser() {
+        const name = document.getElementById('nameInput').value;
+        const role = document.getElementById('roleInput').value;
+
+        if(!name) { alert('برجاء كتابة الاسم'); return; }
+
+        usersList.push({ id: Date.now(), name: name, role: role, score: 0 });
+        document.getElementById('nameInput').value = '';
+        alert('تم التسجيل بنجاح!');
+    }
+
+    // تعديل النقاط
+    function updateScore(userId, points) {
+        let user = usersList.find(u => u.id === userId);
+        if(user) {
+            user.score += points;
+            updateUI();
         }
     }
 
-    function render() {
-        // لوحة الصدارة
-        const lb = document.getElementById('leaderboardList');
-        lb.innerHTML = '';
-        const sortedUsers = [...users].sort((a, b) => b.score - a.score);
-        if(sortedUsers.length === 0) lb.innerHTML = '<p style="text-align:center;">لا يوجد مشاركين مسجلين حتى الآن.</p>';
-        sortedUsers.forEach((u, index) => {
-            lb.innerHTML += `<div class="user-row">
-                <span><b>#${index + 1}</b> ${u.name} <span class="tag">${u.role === 'host' ? 'هوست' : 'مشارك'}</span></span>
-                <span><b>النقاط: ${u.score}</b></span>
-            </div>`;
+    // تحديث البيانات المعروضة في الشاشات
+    function updateUI() {
+        // تحديث لوحة الصدارة
+        const lbContainer = document.getElementById('leaderboardData');
+        lbContainer.innerHTML = '';
+        
+        let sorted = [...usersList].sort((a,b) => b.score - a.score);
+        if(sorted.length === 0) lbContainer.innerHTML = '<p style="text-align:center; color:#94a3b8;">لا يوجد مشاركين بعد</p>';
+
+        sorted.forEach((user, idx) => {
+            lbContainer.innerHTML += `
+                <div class="user-row">
+                    <span><b>#${idx+1}</b> ${user.name} ${user.role === 'host' ? '(هوست)' : ''}</span>
+                    <span class="score-badge">${user.score} نقطة</span>
+                </div>
+            `;
         });
 
-        // تحكم الهوست
-        const hc = document.getElementById('hostControlList');
-        hc.innerHTML = '';
-        const normalUsers = users.filter(u => u.role === 'user');
-        if(normalUsers.length === 0) hc.innerHTML = '<p style="text-align:center;">لا يوجد مشاركين لزيادة أو تنقيص نقاطهم.</p>';
-        normalUsers.forEach(u => {
-            hc.innerHTML += `<div class="user-row">
-                <span><b>${u.name}</b> (الرصيد الحالي: ${u.score})</span>
-                <div>
-                    <button class="btn-success" onclick="changeScore(${u.id}, 10)">+10</button>
-                    <button class="btn-danger" onclick="changeScore(${u.id}, -10)">-10</button>
+        // تحديث لوحة الهوست
+        const hostContainer = document.getElementById('hostControlData');
+        hostContainer.innerHTML = '';
+        
+        let attendees = usersList.filter(u => u.role === 'user');
+        if(attendees.length === 0) hostContainer.innerHTML = '<p style="text-align:center; color:#94a3b8;">لا يوجد مشاركين للتعديل عليهم</p>';
+
+        attendees.forEach(user => {
+            hostContainer.innerHTML += `
+                <div class="user-row">
+                    <span>${user.name}</span>
+                    <div>
+                        <button class="btn-score btn-plus" onclick="updateScore(${user.id}, 10)">+10</button>
+                        <button class="btn-score btn-minus" onclick="updateScore(${user.id}, -10)">-10</button>
+                    </div>
                 </div>
-            </div>`;
+            `;
         });
     }
-
-    render();
 </script>
 
 </body>
