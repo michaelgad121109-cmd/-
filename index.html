@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة المؤتمر</title>
+    <style>
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: #f4f6f9; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        h1, h2, h3 { text-align: center; color: #2c3e50; }
+        nav { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 25px; }
+        button { background: #3498db; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; }
+        button:hover { background: #2980b9; }
+        .btn-danger { background: #e74c3c; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-success { background: #2ecc71; }
+        .btn-success:hover { background: #27ae60; }
+        .section { display: none; }
+        .active { display: block; }
+        form { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 0 auto; }
+        input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .card { background: #f8f9fa; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 12px; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
+        .tag { background: #e0e0e0; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚀 منصة المؤتمر التفاعلية</h1>
+    
+    <nav>
+        <button onclick="showSection('register')">👤 التسجيل</button>
+        <button onclick="showSection('leaderboard')">🏆 لوحة الصدارة</button>
+        <button onclick="showSection('books')">📚 الكتب والمسابقات</button>
+        <button onclick="showSection('host')" style="background:#8e44ad;">⚙️ لوحة الهوست</button>
+    </nav>
+
+    <!-- 1. صفحة التسجيل -->
+    <div id="register" class="section active">
+        <h2>تسجيل مشارك جديد</h2>
+        <form id="regForm">
+            <input type="text" id="username" placeholder="الاسم بالكامل" required>
+            <select id="userRole">
+                <option value="user">مشارك / زائر</option>
+                <option value="host">هوست (منظم للمؤتمر)</option>
+            </select>
+            <button type="submit" class="btn-success">دخول المنصة</button>
+        </form>
+    </div>
+
+    <!-- 2. لوحة الصدارة -->
+    <div id="leaderboard" class="section">
+        <h2>ترتيب المتنافسين النقاط 🎯</h2>
+        <div id="leaderboardList"></div>
+    </div>
+
+    <!-- 3. الكتب والمسابقات -->
+    <div id="books" class="section">
+        <h2>📚 الكتب والملفات المتاحة</h2>
+        <div id="booksList">
+            <div class="card">
+                <h3>📖 كتيب المؤتمر الرئيسي</h3>
+                <p>الملف التعريفي بجدول أعمال المؤتمر والمحاضرين.</p>
+                <a href="book1.pdf" download><button class="btn-success">تحميل PDF ⬇️</button></a>
+            </div>
+        </div>
+
+        <h2>🏆 المسابقات الحالية</h2>
+        <div id="competitionsList">
+            <div class="card">
+                <h3>تحدي الجلسة الأولى</h3>
+                <p>إجابة السؤال المطروح في الجلسة: اطلب من الهوست إضافة 50 نقطة لرصيدك عند إجابتك الصحيحة!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. لوحة التحكم الهوست -->
+    <div id="host" class="section">
+        <h2>لوحة تحكم المنظمين (إدارة النقاط)</h2>
+        <p style="text-align:center; color: #7f8c8d;">تستطيع من هنا زيادة أو تنقيص نقاط أي مشارك بناءً على تفاعله في المؤتمر.</p>
+        <div id="hostControlList"></div>
+    </div>
+</div>
+
+<script>
+    let users = JSON.parse(localStorage.getItem('conf_users')) || [];
+
+    function saveUsers() {
+        localStorage.setItem('conf_users', JSON.stringify(users));
+        render();
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    document.getElementById('regForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('username').value;
+        const role = document.getElementById('userRole').value;
+        
+        users.push({ id: Date.now(), name, role, score: 0 });
+        saveUsers();
+        alert('تم التسجيل بنجاح!');
+        document.getElementById('username').value = '';
+        showSection('leaderboard');
+    });
+
+    function changeScore(userId, amount) {
+        const user = users.find(u => u.id === userId);
+        if (user) {
+            user.score += amount;
+            saveUsers();
+        }
+    }
+
+    function render() {
+        // لوحة الصدارة
+        const lb = document.getElementById('leaderboardList');
+        lb.innerHTML = '';
+        const sortedUsers = [...users].sort((a, b) => b.score - a.score);
+        if(sortedUsers.length === 0) lb.innerHTML = '<p style="text-align:center;">لا يوجد مشاركين مسجلين حتى الآن.</p>';
+        sortedUsers.forEach((u, index) => {
+            lb.innerHTML += `<div class="user-row">
+                <span><b>#${index + 1}</b> ${u.name} <span class="tag">${u.role === 'host' ? 'هوست' : 'مشارك'}</span></span>
+                <span><b>النقاط: ${u.score}</b></span>
+            </div>`;
+        });
+
+        // تحكم الهوست
+        const hc = document.getElementById('hostControlList');
+        hc.innerHTML = '';
+        const normalUsers = users.filter(u => u.role === 'user');
+        if(normalUsers.length === 0) hc.innerHTML = '<p style="text-align:center;">لا يوجد مشاركين لزيادة أو تنقيص نقاطهم.</p>';
+        normalUsers.forEach(u => {
+            hc.innerHTML += `<div class="user-row">
+                <span><b>${u.name}</b> (الرصيد الحالي: ${u.score})</span>
+                <div>
+                    <button class="btn-success" onclick="changeScore(${u.id}, 10)">+10</button>
+                    <button class="btn-danger" onclick="changeScore(${u.id}, -10)">-10</button>
+                </div>
+            </div>`;
+        });
+    }
+
+    render();
+</script>
+
+</body>
+</html>
